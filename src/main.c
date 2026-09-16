@@ -1,4 +1,3 @@
-
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <string.h>
@@ -19,7 +18,7 @@ int main(void)
     printf("      Shellforge \n");
     printf(" A Unix Style Shell written in C\n");
     printf("=====================================\n");
-
+ using_history();
  token_list_t tokens;
  pipeline_t pipeline;
  
@@ -64,19 +63,13 @@ int main(void)
 	}
 
 
-	for (int i = 0; i < pipeline.command_count; i++)
-	{
-    		int result =
-        	execute_command(&pipeline.commands[i]);
+	if (pipeline.command_count == 1 &&  pipeline.commands[0].argc > 0 && strcmp(pipeline.commands[0].argv[0],"exit") == 0)
+         {
+                free(line);
+                break;
+            }
 
-        	if (result == 1)
-    	        {
-        	 free(line);
-		  return 0;
-                  
-        	}
-
-        }
+        execute_pipeline(&pipeline);
 
        free(line);
 
